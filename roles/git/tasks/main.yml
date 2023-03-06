@@ -1,0 +1,34 @@
+- name: Install git version control
+  become: yes
+  apt:
+    name: git
+    state: present
+
+- name: Cloning the git code base
+  git:
+    repo: "{{code_base}}"
+    dest: "{{working_dir}}"
+  ignore_errors: yes
+
+- name: Make sure the remote app root exists and has the right permissions
+  file:
+    path: "{{working_dir }}/{{app_root_dir}}"
+    state: directory
+    mode: "0777"
+    owner: "{{remote_user}}"
+    group: "{{remote_user}}"
+
+- name: Set up additional directory permissions for www-data user on bootstrap/cache folder
+  file:
+    path: "{{working_dir}}/{{app_root_dir}}/bootstrap/cache"
+    state: directory
+    mode: "0777"
+    owner: "{{ remote_user }}"
+
+- name: Set up additional directory permissions for www-data user on storage folder
+  file:
+    path: "{{working_dir}}/{{app_root_dir}}/storage/logs/laravel.log"
+    mode: "0777"
+    owner: "{{remote_user}}"
+    state: directory
+  ignore_errors: yes

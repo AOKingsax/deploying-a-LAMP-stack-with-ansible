@@ -1,0 +1,45 @@
+- name: Update the local repository
+  become: yes
+  apt:
+    update_cache: yes
+
+- name: Install apache2 web server
+  become: yes
+  apt:
+    name: apache2
+    state: present
+
+- name: copy virtual host config file to host
+  become: yes
+  copy:
+    src: "laravel.conf"
+    dest: "{{path_vhost}}"
+
+- name: Enable apache2 web server
+  become: yes
+  file:
+    src: "/etc/apache2/sites-available/laravel.conf"
+    dest: "/etc/apache2/sites-enabled/laravel.conf"
+    state: link
+
+- name: Removes default host config file
+  become: yes
+  file:
+    path: "/etc/apache2/sites-enabled/000-default.conf"
+    state: absent
+
+- name: enable rewrite
+  shell: a2enmod rewrite
+  become: yes
+
+- name: Reload apache2
+  become: yes
+  service:
+    name: apache2
+    state: reloaded
+
+- name: Restart apache2
+  become: yes
+  service:
+    name: apache2
+    state: restarted

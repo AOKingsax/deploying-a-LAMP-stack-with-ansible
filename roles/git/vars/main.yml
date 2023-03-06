@@ -1,0 +1,7 @@
+code_base: https://github.com/f1amy/laravel-realworld-example-app
+
+working_dir: /var/www/
+
+app_root_dir: laravel-realworld-example-app
+
+remote_user: ubuntu
