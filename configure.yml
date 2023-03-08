@@ -1,0 +1,10 @@
+- name: Laravel project
+  become: true
+  hosts: all
+  roles:
+    - apache
+    - git
+#    - php
+#    - composer
+#    - mysql
+#    - backend-setup
